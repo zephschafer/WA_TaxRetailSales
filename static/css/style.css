@@ -53,20 +53,16 @@ path.domain {
     top: 1%;
     align: center;
     margin-top: 75px;
-    margin-left: auto;
-    margin-right: auto;
-    height: 400px;
-    width: 600px;
+
 }
 
 #stacked-chart {
     background:#FEFEFE;
     top: 1%;
-    margin-top: 50px;
-    margin-left: auto;
-    margin-right: auto;
-    height:400px;
-    width: 600px;
+    position: relative;
+    align: center;
+    margin: auto;
+    left: 20%;
 }
 
 #tooltip {
@@ -107,9 +103,20 @@ path.domain {
 }
 #county-select{
   position: relative;
-  font-size: 12px;
+  font-size: 14px;
   top: 20px;
   align: center;
+  margin-left: auto;
+  text-align: center;
+  margin-right: auto;
+  width: 900px;
+}
+
+#source-note{
+  position: relative;
+  font-size: 10px;
+  top: 20px;
+  align: left;
   margin-left: auto;
   text-align: center;
   margin-right: auto;
