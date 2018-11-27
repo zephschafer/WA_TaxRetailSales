@@ -1,0 +1,119 @@
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: #FEFEFE;
+    width: 1000px;
+    margin: 0 auto;
+}
+
+a:link {
+    color: royalblue;
+    text-decoration:none;
+}
+
+
+a:hover {
+    text-decoration:underline;
+}
+
+svg {
+  font: 10px sans-serif;
+  shape-rendering: crispEdges;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  font: 10px sans-serif;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+path.domain {
+  stroke: none;
+}
+
+.y .tick line {
+  stroke: #ddd;
+}
+
+#title-main {
+    position: relative;
+    font-size: 40px;
+    font-weight: 100;
+    top: 20px;
+    align: center;
+    margin-left: auto;
+    text-align: center;
+    margin-right: auto;
+    width: 900px;
+}
+
+#chart-holder{
+    background:#FEFEFE;
+    top: 1%;
+    align: center;
+    margin-top: 75px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 400px;
+    width: 600px;
+}
+
+#stacked-chart {
+    background:#FEFEFE;
+    top: 1%;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    height:400px;
+    width: 600px;
+}
+
+#tooltip {
+  position: absolute;
+  width: 100px;
+  font-family: "Franklin Gothic Book";
+  height: auto;
+  padding: 10px;
+  background-color: white;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4); -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4); box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4); pointer-events: none;
+}
+
+#tooltip.hidden {
+  display: none;
+}
+
+#tooltip p {
+  margin: 0;
+  font-family: sans-serif;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+#nobel-bar {
+  width: 600px;
+  height: 400px;
+}
+
+
+#industry-select{
+  align: center;
+  position: relative;
+  left: 450px;
+
+}
+#county-select{
+  position: relative;
+  font-size: 12px;
+  top: 20px;
+  align: center;
+  margin-left: auto;
+  text-align: center;
+  margin-right: auto;
+  width: 900px;
+}
+
+.axis {}
