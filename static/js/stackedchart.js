@@ -5,7 +5,7 @@ d3.csv("static/data/STR_WA_C_N1_A_W.csv", function(data) {
 
   var data = data;
   // Set Initial Geography
-  var countyselection = "Statewide"
+  var countyselection = "Adams County"
   drawViz(data, countyselection)
 
 });
