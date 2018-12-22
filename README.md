@@ -1,5 +1,5 @@
 # WA_TaxRetailSales
 
-This repository produces a web visualization that shows taxable retail sales for the Washington State in a stacked bar chart.
+An interactive stacked barchart, which uses D3 to plot taxable retail sales for the Washington State. Over time and by industrial category.
 
 View the visualization at www.pathdependent.net.
