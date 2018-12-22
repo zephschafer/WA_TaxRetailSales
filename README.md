@@ -4,4 +4,4 @@ An interactive stacked barchart, which uses D3 to plot taxable retail sales for 
 
 And an jupyter notebook with a script to scrape the relevant data.
 
-View the visualization at www.pathdependent.net.
+View the graphed data at www.pathdependent.net.
