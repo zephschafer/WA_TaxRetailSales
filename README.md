@@ -1,6 +1,6 @@
 # WA_TaxRetailSales
 
-An interactive stacked barchart, which uses D3 to plot taxable retail sales for the Washington State. Over time and by industrial category.
+An interactive stacked barchart, which uses D3 to plot taxable retail sales for the Washington State. Over time, by county, and industrial category.
 
 And a notebook with a script to scrape the relevant data.
 
