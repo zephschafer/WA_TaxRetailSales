@@ -1,18 +1,10 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 # # Scrape WA DOR Tax Sales Data
 
 # #### (1) Scrape
 # #### (2) Clean and Compile
 # #### (3) Export
 
-# #  
-
-# In[2]:
-
-
-# ----- IMPORT_REQUIREMENTS ----- 
+# ----- IMPORT_REQUIREMENTS -----
 
 from tqdm import tqdm_notebook as tqdm
 from time import sleep
@@ -21,21 +13,13 @@ import lxml.html
 import pandas as pd
 import re
 
-
-# In[3]:
-
-
-# ----- SPECIFY_OUTPUT_LOCATION ----- 
+# ----- SPECIFY_OUTPUT_LOCATION -----
 
 output = '../static/data/'
 
 
 # ### (1) Scrape
-
-# In[3]:
-
-
-# ----- Get_County_Codes ----- 
+# ----- Get_County_Codes -----
 
 # From the point-and-click county filter on the original website,
 # scrape the list of counties
@@ -49,11 +33,7 @@ county_codes.append('Statewide')
 print(county_codes[0:5]) # just a snippet of what we've got
 print 'Number of Counties: '+ str(len(county_codes))
 
-
-# In[4]:
-
-
-# ----- Create_List_of_Year_for_the_UL ----- 
+# ----- Create_List_of_Year_for_the_UL -----
 
 dates_list = [str(year) + str(datetype)
          for year in range(2005,2017)
@@ -62,11 +42,7 @@ dates_str = ''
 for i in dates_list:
     dates_str = dates_str + ',' + str(i)
 
-
-# In[5]:
-
-
-# ----- Define_Scrape_Function_for_Sales_Data ----- 
+# ----- Define_Scrape_Function_for_Sales_Data -----
 
 def scrape_sales_data(url):
     geturl = requests.get(url)
@@ -86,7 +62,7 @@ def scrape_sales_data(url):
                 break
             i = 0
             for t in T.iterchildren():
-                data = t.text_content() 
+                data = t.text_content()
                 col[i][1].append(data)
                 i += 1
             Dict = {title:column for (title,column) in col}
@@ -98,11 +74,7 @@ def scrape_sales_data(url):
         df['location_name'] = newstring_c
         return df
 
-
-# In[6]:
-
-
-# ----- Execute_Scrape ----- 
+# ----- Execute_Scrape -----
 
 results = []
 i = 0
@@ -120,7 +92,7 @@ for naicstyp in ['2']:
                   + "&Format=HTML&TaxType=45")
         try:
             df = scrape_sales_data(url)
-        except: 
+        except:
             sleep(45)
             df = scrape_sales_data(url)
         checkpoint = '1_' + str(county) + str(i)
@@ -143,11 +115,7 @@ for naicstyp in ['2']:
                 i = 0
                 checkpoint = ' ---Export---' + str(export_count) + '---'
 
-
-# In[9]:
-
-
-# ----- Get_NAICS_Code_Names ----- 
+# ----- Get_NAICS_Code_Names -----
 # Get Category Names
 tr = lxml.html.fromstring(requests.get('https://www.naics.com/search/').content).xpath('//tr')
 # naics table is the first 22 rows, minus the first header row
@@ -177,10 +145,7 @@ naics_lookup['short_names'] = naics_lookup.names.replace({'Agriculture, Forestry
 
 # ### (2) Compile and Clean
 
-# In[11]:
-
-
-# ----- Compile_Slices ----- 
+# ----- Compile_Slices -----
 
 i = 1
 for file_n in range(1,export_count):
@@ -198,11 +163,7 @@ for file_n in range(1,export_count):
     else:
         salestaxrev = pd.concat([salestaxrev,temp])
 
-
-# In[12]:
-
-
-# ----- Clean_Compilation ----- 
+# ----- Clean_Compilation -----
 # Clean County Info
 salestaxrev['county'] = salestaxrev['location_name'].str.contains('Unincorporated')
 salestaxrev['county_name'] = salestaxrev['location_name'].where(salestaxrev['county'])    .str.replace('Unincorporated ','').ffill()
@@ -222,32 +183,29 @@ salestaxrev = salestaxrev.rename(index=str, columns={'Total Taxable':'sales','NA
 salestaxrev = salestaxrev[['state','location_name','location_id','county_name','datetyp'                           ,'date','naics_typ','naics','sales','units']]
 # Merge NAICS
 salestaxrev = salestaxrev.merge(naics_lookup, left_on='naics', right_on='codes', how='left')                                    .drop(columns = ['names','codes'])
-# Create a Quarterly and Annual 
+# Create a Quarterly and Annual
 salestaxrev_qtrly = salestaxrev[salestaxrev.datetyp == 'Q']
 salestaxrev_annual = salestaxrev[salestaxrev.datetyp == 'A']
 
 
 # ### (3) Export
 
-# In[13]:
-
-
-# ----- Tables_6 files ----- 
-# ----- Group_Across_Place ----- 
+# ----- Tables_6 files -----
+# ----- Group_Across_Place -----
 # N1
 salestaxrev_qtrly.to_csv(output + 'SalTaxRev_WA_place_N1_qtrly' + '.csv', index=0)
 salestaxrev_annual.to_csv(output + 'SalTaxRev_WA_place_N1_annl' + '.csv', index=0)
 # N0
 salestaxrev_qtrly[['date','county_name','location_name','location_id','sales','units']]    .groupby(['county_name','location_name','location_id','date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_place_N0_qtrly' + '.csv', index=0)
 salestaxrev_annual[['date','county_name','location_name','location_id','sales','units']]    .groupby(['county_name','location_name','location_id','date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_place_N0_annl' + '.csv', index=0)
-# ----- Group_Across_County ----- 
+# ----- Group_Across_County -----
 # N1
 salestaxrev_qtrly[['date','county_name','naics','short_names','sales','units']]    .groupby(['county_name','short_names','naics','date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_state_N1_qtrly' + '.csv', index=0)
 salestaxrev_annual[['date','county_name','naics'                    ,'short_names','sales','units']]    .groupby(['county_name','short_names','naics','date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_county_N1_annl' + '.csv', index=0)
 # N0
 salestaxrev_qtrly[['date','county_name','sales','units']]    .groupby(['county_name','date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_state_N0_qtrly' + '.csv', index=0)
 salestaxrev_annual[['date','county_name','naics','sales','units']]    .groupby(['county_name','date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_county_N0_annl' + '.csv', index=0)
-# ----- Group_Across_State ----- 
+# ----- Group_Across_State -----
 # N1
 salestaxrev_qtrly[['date','state','naics','short_names','sales','units']]    .groupby(['naics','short_names','date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_state_N1_qtrly' + '.csv', index=0)
 SalTaxRev_WA_state_N1_annl = salestaxrev_annual[['date','state','naics','short_names'                                                 ,'sales','units']]    .groupby(['naics','short_names','date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_state_N1_annl' + '.csv', index=0)
@@ -255,11 +213,7 @@ SalTaxRev_WA_state_N1_annl = salestaxrev_annual[['date','state','naics','short_n
 salestaxrev_qtrly[['date','state','sales','units']]    .groupby(['date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_state_N0_qtrly' + '.csv', index=0)
 salestaxrev_annual[['date','state','sales','units']]    .groupby(['date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_state_N0_annl' + '.csv', index=0)
 
-
-# In[30]:
-
-
-# ----- Export_to_suit_the_Viz ----- 
+# ----- Export_to_suit_the_Viz -----
 
 df1 = pd.read_csv(output + 'SalTaxRev_WA_county_N1_annl.csv')        .groupby(['county_name','short_names','date']).sum().reset_index()
 df1['date'] = pd.to_datetime(df1.date).dt.strftime('%m/%d/%y')
@@ -269,4 +223,3 @@ df3 = df1.append(df2)
 df4 = df3.rename(columns={"date":"year","county_name":"county"})
 STR_WA_C_N1_A_W = pd.pivot_table(df4, values='sales',                     index=['year','county'], columns='short_names')
 STR_WA_C_N1_A_W.to_csv(output + 'STR_WA_C_N1_A_W' + '.csv')
-
