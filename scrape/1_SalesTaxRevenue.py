@@ -190,14 +190,6 @@ salestaxrev_annual = salestaxrev[salestaxrev.datetyp == 'A']
 
 # ### (3) Export
 
-# ----- Tables_6 files -----
-# ----- Group_Across_Place -----
-# N1
-salestaxrev_qtrly.to_csv(output + 'SalTaxRev_WA_place_N1_qtrly' + '.csv', index=0)
-salestaxrev_annual.to_csv(output + 'SalTaxRev_WA_place_N1_annl' + '.csv', index=0)
-# N0
-salestaxrev_qtrly[['date','county_name','location_name','location_id','sales','units']]    .groupby(['county_name','location_name','location_id','date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_place_N0_qtrly' + '.csv', index=0)
-salestaxrev_annual[['date','county_name','location_name','location_id','sales','units']]    .groupby(['county_name','location_name','location_id','date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_place_N0_annl' + '.csv', index=0)
 # ----- Group_Across_County -----
 # N1
 salestaxrev_qtrly[['date','county_name','naics','short_names','sales','units']]    .groupby(['county_name','short_names','naics','date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_state_N1_qtrly' + '.csv', index=0)
@@ -205,14 +197,7 @@ salestaxrev_annual[['date','county_name','naics'                    ,'short_name
 # N0
 salestaxrev_qtrly[['date','county_name','sales','units']]    .groupby(['county_name','date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_state_N0_qtrly' + '.csv', index=0)
 salestaxrev_annual[['date','county_name','naics','sales','units']]    .groupby(['county_name','date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_county_N0_annl' + '.csv', index=0)
-# ----- Group_Across_State -----
-# N1
-salestaxrev_qtrly[['date','state','naics','short_names','sales','units']]    .groupby(['naics','short_names','date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_state_N1_qtrly' + '.csv', index=0)
-SalTaxRev_WA_state_N1_annl = salestaxrev_annual[['date','state','naics','short_names'                                                 ,'sales','units']]    .groupby(['naics','short_names','date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_state_N1_annl' + '.csv', index=0)
-# N0
-salestaxrev_qtrly[['date','state','sales','units']]    .groupby(['date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_state_N0_qtrly' + '.csv', index=0)
-salestaxrev_annual[['date','state','sales','units']]    .groupby(['date']).sum().reset_index()    .to_csv(output + 'SalTaxRev_WA_state_N0_annl' + '.csv', index=0)
-
+#
 # ----- Export_to_suit_the_Viz -----
 
 df1 = pd.read_csv(output + 'SalTaxRev_WA_county_N1_annl.csv')        .groupby(['county_name','short_names','date']).sum().reset_index()
